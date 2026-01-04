@@ -49,7 +49,12 @@ public class ObstacleSpawner : MonoBehaviour
         // Set spawn position ahead of the player
         Vector3 spawnPos = new Vector3(randomX, 0, player.position.z + spawnDistance);
         
-        // Instantiate the obstacle
-        Instantiate(obstaclePrefab, spawnPos, Quaternion.identity);
+        if (obstaclePrefab != null)
+        {
+            Instantiate(obstaclePrefab, spawnPos, Quaternion.identity);
+        } else
+        {
+            Debug.LogError("Obstacle Prefab is not assigned in the Inspector.");
+        }
     }
 }

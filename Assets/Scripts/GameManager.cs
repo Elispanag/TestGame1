@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,10 +10,18 @@ public class GameManager : MonoBehaviour
 
     public Image heartFillImage;
 
+    public GameObject gameOverScreen;
+
+    public Transform player;
+    public TextMeshProUGUI finalScoreText;
+
+
     void Start()
     {
         maxLives = lives;
         UpdateHeartsUI();
+        // Ensure the game is running
+        Time.timeScale = 1f; 
     }
     public void LoseLife()
     {
@@ -20,9 +29,28 @@ public class GameManager : MonoBehaviour
         UpdateHeartsUI();
 
         if (lives <= 0)
-        {   //When lives reach 0 restart the scene
-           UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        {
+            EndGame();
         }
+    }
+
+    void EndGame()
+    {
+        if (gameOverScreen != null)
+        {
+            gameOverScreen.SetActive(true);
+        }
+        if (player !=null && finalScoreText !=null)
+        {
+            float score = player.position.z;
+            finalScoreText.text = "Final Score: " + score.ToString("F0"); // FO means no decimal places
+        }
+        Time.timeScale = 0f; // Pause the game
+    }
+    public void RestartGame()
+    {
+        Time.timeScale = 1f; // Resume the game
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     void UpdateHeartsUI()
     {
